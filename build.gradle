@@ -32,7 +32,7 @@ ext {
 	commonsLang3Version = "3.3.2"
 	springVersion 		= "4.0.6.RELEASE"
 	mockitoVersion		= "1.10.19"
-	testngVersion 		= "6.8"
+	junitVersion		= "4.10"
 
 	downloadedDevDir 	= "$rootDir/lib"
 
@@ -84,10 +84,6 @@ subprojects {
 			systemProperties(System.getProperties())
 			systemProperties['user.dir'] = workingDir
 		}
-
-		useTestNG {
-			suites 'src/test/resources/testng.xml'
-		}
 	}
 
 	repositories {
@@ -106,7 +102,7 @@ subprojects {
 		provided   	"org.slf4j:slf4j-api:" + slf4jVersion
 		provided 	"ch.qos.logback:logback-classic:" + logbackVersion
 		provided 	"ch.qos.logback:logback-core:" + logbackVersion
-		compile 	"org.testng:testng:" + testngVersion
+		compile "junit:junit:" + junitVersion
 	}
 
 
