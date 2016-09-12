@@ -1,0 +1,181 @@
+task wrapper(type: Wrapper) {
+	gradleVersion = '2.13'
+}
+
+allprojects  {
+	group = 'org.wicked_smart.lsd_test_app'
+	version = '0.0.1'
+	apply plugin: 'maven'
+	apply plugin: 'idea'
+}
+
+buildscript {
+	repositories {
+		jcenter()
+		mavenCentral()
+	}
+
+	dependencies {
+		classpath 'org.ajoberstar:grgit:1.1.0'
+		classpath 'com.netflix.nebula:gradle-extra-configurations-plugin:3.0.3'
+	}
+}
+
+import java.text.SimpleDateFormat
+
+ext {
+	junitVersion		= "4.10"
+	logbackVersion		= "1.1.3"
+	slf4jVersion 		= "1.7.12"
+	jettisonVersion		= "1.3.1"
+	jerseyVersion		= "2.10"
+	servletApiVersion	= "3.0.1"
+	commonsLang3Version = "3.3.2"
+	springVersion 		= "4.0.6.RELEASE"
+	mockitoVersion		= "1.10.19"
+	testngVersion 		= "6.8"
+
+	downloadedDevDir 	= "$rootDir/lib"
+
+	mainTestRunner		= ""
+
+	final SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd.HHmm");
+	sdf.setTimeZone(TimeZone.getTimeZone("America/New_York"))
+	buildTimeStamp 		= sdf.format(new Date());
+
+	// Open the Git repository in the current directory.
+	git = org.ajoberstar.grgit.Grgit.open(file('.'))
+
+	// Get commit id of HEAD.
+	gitHash = git.head().getAbbreviatedId(7)
+
+	// Get Java version used
+	javaVersion = org.gradle.internal.jvm.Jvm.current()
+
+	// Get Ant version used
+	antVersion = ant.properties.get("ant.version")
+
+	def branchName = git.branch.current.name;
+	if (!branchName.equals("master")) {
+		project.version = project.version + "-SNAPSHOT"
+	}
+}
+
+subprojects {
+	apply plugin: 'java'
+	apply from: "$rootDir/jacoco.gradle"
+
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
+	compileJava.options.encoding = 'UTF-8'
+	compileTestJava.options.encoding = 'UTF-8'
+
+	test {
+		testLogging.showStandardStreams = true
+
+		jacoco {
+			enabled = (System.getProperty("cc") == "jacoco" || System.getenv("cc") == "jacoco")
+			append = false
+		}
+
+		reports.html.destination = file ("$reports.html.destination/unit")
+		reports.junitXml.destination = file("$reports.junitXml.destination/unit")
+
+		options {
+			systemProperties(System.getProperties())
+			systemProperties['user.dir'] = workingDir
+		}
+	}
+
+	repositories {
+//		maven {
+//			url nexusRoot + "thirdparty/"
+//		}
+//		maven {
+//			url nexusRoot + "releases/"
+//		}
+		mavenCentral()
+	}
+
+	apply plugin: 'nebula.provided-base'
+
+	dependencies {
+		provided   	"org.slf4j:slf4j-api:" + slf4jVersion
+		provided 	"ch.qos.logback:logback-classic:" + logbackVersion
+		provided 	"ch.qos.logback:logback-core:" + logbackVersion
+		testCompile "org.testng:testng:" + junitVersion
+	}
+
+
+	//Upload to Maven Repo (nexus)
+	uploadArchives {
+		repositories {
+			mavenDeployer {
+				repository(url: nexusRoot + "releases/") {
+					authentication(userName: nexusUser, password: nexusPassword)
+				}
+				pom.groupId = project.group
+				pom.artifactId = project.name
+				pom.version = project.version
+			}
+		}
+	}
+
+	afterEvaluate { Project project ->
+
+		if (project.name.contains("Wkr") || project.name.contains("Web")) {
+			war {
+				manifest {
+					attributes(
+							"Manifest-Version": 1.0,
+							"Ant-Version": antVersion,
+							"Created-By": javaVersion,
+							"Implementation-Version": "$releaseVersion.$buildTimeStamp",
+							"Implementation-GitHash": gitHash
+					)
+				}
+			}
+		}
+	}
+
+	sourceSets {
+		integrationTest {
+			java.srcDir file('src/integrationTest/java')
+			resources.srcDir file('src/integrationTest/resources')
+			compileClasspath += sourceSets.test.compileClasspath
+			runtimeClasspath += sourceSets.test.runtimeClasspath
+		}
+	}
+
+	configurations {
+		integrationTestCompile.extendsFrom testCompile
+		integrationTestRuntime.extendsFrom testRuntime
+	}
+
+	task integrationTest(type: Test) {
+
+
+		testClassesDir = sourceSets.integrationTest.output.classesDir
+		classpath = sourceSets.integrationTest.runtimeClasspath
+
+		testLogging.showStandardStreams = true
+
+		jacoco {
+			enabled = (System.getProperty("cc") == "jacoco" || System.getenv("cc") == "jacoco")
+			append = false
+		}
+
+		options {
+			systemProperties(System.getProperties())
+			systemProperties['user.dir'] = workingDir
+		}
+
+		reports.html.destination = file ("$reports.html.destination/intg")
+		reports.junitXml.destination = file("$reports.junitXml.destination/intg")
+	}
+}
+
+afterEvaluate {
+
+	println "Download Jars For Deploy Scripts If Necessary"
+}

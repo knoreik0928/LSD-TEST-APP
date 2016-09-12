@@ -1,0 +1,29 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'org.ajoberstar:gradle-jacoco:0.3.0'
+    }
+}
+
+apply plugin: 'jacoco'
+
+jacoco {
+
+    toolVersion = "0.7.1.201405082137"
+}
+
+
+jacocoTestReport {
+
+    additionalSourceDirs = files(sourceSets.main.allJava.srcDirs)
+
+    reports {
+        html.enabled = true
+        xml.enabled = false
+        csv.enabled = false
+        html.destination "${buildDir}/jacocoHtml"
+    }
+}
