@@ -1,2 +1,2 @@
-//include ':SystemMonitor-Wkr'
-include ':SystemMonitor-Client'
+include ':SystemMonitor-Wkr'
+//include ':SystemMonitor-Client'

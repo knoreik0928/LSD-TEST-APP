@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="Unit Test Suite">
+    <test name="Unit Test">
+        <packages>
+            <package name="org.wicked_smart.system_monitor.service"/>
+        </packages>
+    </test>
+</suite>

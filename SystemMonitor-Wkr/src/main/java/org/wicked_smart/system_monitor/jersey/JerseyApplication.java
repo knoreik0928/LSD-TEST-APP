@@ -1,13 +1,12 @@
 package org.wicked_smart.system_monitor.jersey;
 
-import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
-
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
 import java.util.HashSet;
 import java.util.Set;
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
+import org.glassfish.jersey.server.spring.scope.RequestContextFilter;
 import org.wicked_smart.system_monitor.controller.HealthCheckController;
-import org.wicked_smart.system_monitor.exception.EntityNotFoundMapper;
+import org.wicked_smart.system_monitor.controller.ManifestController;
 
 @ApplicationPath("/services")
 public class JerseyApplication extends Application {
@@ -21,8 +20,8 @@ public class JerseyApplication extends Application {
     public JerseyApplication() {
     	
     	singletons.add(new HealthCheckController());
+        singletons.add(new ManifestController());
     	resources.add(RequestContextFilter.class);
-    	resources.add(EntityNotFoundMapper.class);
     }
     
     @Override

@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wicked_smart.system_monitor.model.SystemStatus;
 import org.wicked_smart.system_monitor.service.HealthCheckService;
-import org.wicked_smart.system_monitor.service.ManifestService;
 
 /**
  * Created by dlahey on 8/15/2016.
@@ -27,7 +26,6 @@ public class HealthCheckController
     @Context
     private HttpServletRequest request;
     private HealthCheckService healthCheckService;
-    private ManifestService manifestService;
 
     public HealthCheckService getHealthCheckService()
     {
@@ -41,40 +39,6 @@ public class HealthCheckController
         this.healthCheckService = healthCheckService;
     }
 
-    public ManifestService getManifestService()
-    {
-        return manifestService;
-    }
-
-    @Inject
-    public void setManifestService(ManifestService manifestService)
-    {
-        this.manifestService = manifestService;
-    }
-
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getManifest()
-    {
-
-        return Response.ok().entity(getManifestService().getManifest()).build();
-    }
-
-
-/*
-    @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createQuery(Query query) {
-
-        LOGGER.info("Query Received=" + query);
-        Query createdQuery = this.healthCheckService.createQuery(query);
-        LOGGER.info("Created Query=" + createdQuery);
-        String location = StringUtils.stripEnd(request.getRequestURI(), "/ ") + "/" + createdQuery.getId();
-        return Response.created(URI.create(location)).build();
-    }
-*/
-
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -87,31 +51,4 @@ public class HealthCheckController
 
         return Response.ok().entity(systemStatus).build();
     }
-
-    /*
-    @PUT
-    @Path("{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateQuery(@PathParam("id") Long id, Query query) {
-
-        Query updatedQuery = this.queryService.updateQuery(id, query);
-        if (updatedQuery == null) {
-            throw new WebApplicationException(Response.Status.NOT_FOUND);
-        }
-        Response response = Response.noContent().build();
-        return response;
-    }
-
-    @DELETE
-    @Path("{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteQuery(@PathParam("id") Long id) {
-
-        this.queryService.deleteQuery(id);
-        Response response = Response.noContent().build();
-        return response;
-    }
-    */
 }

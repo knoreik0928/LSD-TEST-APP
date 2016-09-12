@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant(TM) version 1.9.3 compiled on December 23 2013
+Created-By: 1.8.0_73 (Oracle Corporation 25.73-b02)
+Implementation-Version: 1.0.160912.0951
+Implementation-GitHash: 093ba57
+

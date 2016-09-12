@@ -27,24 +27,4 @@
 		<servlet-name>Jersey</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
-
-	<listener>
-		<listener-class>
-			org.wicked_smart.system_monitor.listener.SystemMonitorServletContextListener
-		</listener-class>
-	</listener>
-
-	<filter>
-		<filter-name>SystemMonitorFilter</filter-name>
-		<filter-class>org.wicked_smart.system_monitor.filter.SystemMonitorFilter</filter-class>
-		<init-param>
-			<param-name>locale</param-name>
-			<param-value>USA</param-value>
-		</init-param>
-	</filter>
-
-	<filter-mapping>
-		<filter-name>SystemMonitorFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
 </web-app>
