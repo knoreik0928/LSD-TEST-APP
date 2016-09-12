@@ -111,7 +111,7 @@ subprojects {
 	uploadArchives {
 		repositories {
 			mavenDeployer {
-				repository(url: nexusRoot + "releases/") {
+				repository(url: nexusRoot + "maven-releases/") {
 					authentication(userName: nexusUser, password: nexusPassword)
 				}
 				pom.groupId = project.group
