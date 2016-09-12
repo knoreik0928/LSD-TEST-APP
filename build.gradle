@@ -4,7 +4,7 @@ task wrapper(type: Wrapper) {
 
 allprojects  {
 	group = 'org.wicked_smart.lsd_test_app'
-	version = '0.0.1'
+	version = releaseVersion + "." + System.getProperty("BUILD_NUMBER", "0");
 	apply plugin: 'maven'
 	apply plugin: 'idea'
 }
