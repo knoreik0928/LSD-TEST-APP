@@ -55,10 +55,10 @@ ext {
 	antVersion = ant.properties.get("ant.version")
 
 	def branchName = git.branch.current.name;
-	println "branchName=" + branchName
-	if (!branchName.equals("master")) {
-		project.version = project.version + "-SNAPSHOT"
-	}
+//	println "branchName=" + branchName
+//	if (!branchName.equals("master")) {
+//		project.version = project.version + "-SNAPSHOT"
+//	}
 
 	Properties props = new Properties()
 	File propsFile = new File('buildVersion.properties')
