@@ -58,6 +58,11 @@ ext {
 	if (!branchName.equals("master")) {
 		project.version = project.version + "-SNAPSHOT"
 	}
+
+	Properties props = new Properties()
+	File propsFile = new File('buildVersion.properties')
+	props.setProperty('buildVersion', project.version.toString())
+	props.store(propsFile.newWriter(), null)
 }
 
 subprojects {
@@ -102,7 +107,7 @@ subprojects {
 		provided   	"org.slf4j:slf4j-api:" + slf4jVersion
 		provided 	"ch.qos.logback:logback-classic:" + logbackVersion
 		provided 	"ch.qos.logback:logback-core:" + logbackVersion
-		compile "junit:junit:" + junitVersion
+		compile 	"junit:junit:" + junitVersion
 	}
 
 
