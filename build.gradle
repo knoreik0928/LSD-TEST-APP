@@ -34,10 +34,6 @@ ext {
 	mockitoVersion		= "1.10.19"
 	junitVersion		= "4.10"
 
-	downloadedDevDir 	= "$rootDir/lib"
-
-	mainTestRunner		= ""
-
 	final SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd.HHmm");
 	sdf.setTimeZone(TimeZone.getTimeZone("America/New_York"))
 	buildTimeStamp 		= sdf.format(new Date());
@@ -55,14 +51,14 @@ ext {
 	antVersion = ant.properties.get("ant.version")
 
 	def branchName = git.branch.current.name;
-//	println "branchName=" + branchName
-//	if (!branchName.equals("master")) {
-//		project.version = project.version + "-SNAPSHOT"
-//	}
 
+	if (!branchName.equals("master") && !branchName.equals("HEAD")) {
+
+		project.version = project.version + "-SNAPSHOT"
+	}
 	Properties props = new Properties()
 	File propsFile = new File('buildVersion.properties')
-	props.setProperty('buildVersion', project.version.toString())
+	props.setProperty('BUILD_VERSION', project.version.toString())
 	props.store(propsFile.newWriter(), null)
 }
 
