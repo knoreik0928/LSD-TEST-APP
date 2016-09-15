@@ -129,9 +129,10 @@ subprojects {
 				manifest {
 					attributes(
 							"Manifest-Version": 1.0,
-							"Ant-Version": antVersion,
 							"Created-By": javaVersion,
-							"Implementation-Version": "$releaseVersion.$buildTimeStamp",
+							"Ant-Version": antVersion,
+							"Implementation-Version": project.version,
+							"Implementation-Timestamp": buildTimeStamp,
 							"Implementation-GitHash": gitHash
 					)
 				}
