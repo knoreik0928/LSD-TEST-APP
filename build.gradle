@@ -56,6 +56,9 @@ ext {
 
 		project.version = project.version + "-SNAPSHOT"
 	}
+	println "Build Version=" + project.version
+	println "Git Hash=" + gitHash
+
 	Properties props = new Properties()
 	File propsFile = new File('buildVersion.properties')
 	props.setProperty('BUILD_VERSION', project.version.toString())
