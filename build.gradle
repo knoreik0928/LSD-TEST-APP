@@ -178,6 +178,30 @@ subprojects {
 		reports.html.destination = file ("$reports.html.destination/intg")
 		reports.junitXml.destination = file("$reports.junitXml.destination/intg")
 	}
+
+	task copyToDistDir() {
+
+		doFirst {
+
+			FileTree tree = fileTree(dir: "$projectDir/build/libs")
+			tree.each {File file ->
+				copyFile(file.absolutePath, "$rootDir/build/$project.name/dist", file.getName().replace("-" + project.version, ''))
+			}
+		}
+	}
+
+	build.finalizedBy copyToDistDir
+}
+
+
+def	copyFile(sourceFilePath, destDirPath) {
+
+	ant.getAnt().copy(file: sourceFilePath, todir: destDirPath)
+}
+
+def	copyFile(sourceFilePath, destDirPath, destFileName) {
+
+	ant.getAnt().copy(file: sourceFilePath, tofile: "$destDirPath/$destFileName")
 }
 
 afterEvaluate {
